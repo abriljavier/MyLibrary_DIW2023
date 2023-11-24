@@ -1,57 +1,45 @@
 package com.example.mylibrary
 
 import android.os.Bundle
-import android.view.Menu
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
-import androidx.navigation.findNavController
+import android.widget.ImageButton
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mylibrary.databinding.ActivityMainBinding
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var drawerToggle: ActionBarDrawerToggle
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        //CONFIGURAR LA TOOLBAR
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
-        setSupportActionBar(binding.appBarMain.toolbar)
+        //DESPLEGAR EL DRAWER
+//        var displayDrawerButton = findViewById<ImageButton>(R.id.imgButtonDisplayDrawer)
+//        displayDrawerButton.setOnClickListener{
+//            println("Despliego el menú del drawer")
+//        }
+        drawerLayout = findViewById(R.menu.drawer_layout)
 
-        binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        //DESPLEGAR EL MENÚ DE MÁS
+        var displayMoreButton = findViewById<ImageButton>(R.id.imgButtonDisplayMore)
+        displayMoreButton.setOnClickListener{
+            var moreDialog = MoreDialog()
+            moreDialog.show(supportFragmentManager, "123")
         }
-        val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
-            ), drawerLayout
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+
+        //MANEJAR EL DRAWER
+
+
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
 }
