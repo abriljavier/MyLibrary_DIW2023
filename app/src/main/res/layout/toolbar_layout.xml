@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:background="#1E7E34"
+    android:elevation="4dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    app:contentInsetStart="0dp">
+
+    <!-- CONTENIDO DE DENTRO DE LA TOOLBAR -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="58dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="8dp"
+            android:text="MyLibrary"
+            android:textColor="@color/textColor"
+            android:textSize="34sp"
+            android:translationZ="90dp"
+            app:layout_constraintStart_toEndOf="@+id/imgButtonDisplayDrawer"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/imgButtonDisplayDrawer"
+            android:layout_width="61dp"
+            android:layout_height="62dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="6dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/burger_menu_icon"
+            android:translationZ="90dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/imgButtonDisplayMore"
+            android:layout_width="61dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="17dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/three_dots_menu"
+            android:translationZ="90dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.appcompat.widget.Toolbar>

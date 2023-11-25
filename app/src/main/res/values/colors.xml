@@ -7,4 +7,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="appBackground">#F0F0F0</color>
+    <color name="titleColor">#228B22</color>
+    <color name="textColor">#333333</color>
+    <color name="toolbarColor">#1E7E34</color>
+    <color name="button">#4CAF50</color>
 </resources>
