@@ -19,10 +19,15 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
+    private lateinit var sqlHelper: SqlHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // CREAR EL OPENHELPER
+        sqlHelper = SqlHelper(this)
+        val db = sqlHelper.writableDatabase
 
         // Configura la ActionBar
         val toolbar: Toolbar = findViewById(R.id.toolbar)
