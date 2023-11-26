@@ -1,10 +1,10 @@
+package com.example.mylibrary
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mylibrary.Book
-import com.example.mylibrary.R
 
 class BookAdapter(private val books: List<Book>) :
     RecyclerView.Adapter<BookAdapter.ViewHolder>() {

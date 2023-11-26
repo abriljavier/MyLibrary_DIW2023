@@ -19,15 +19,14 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
-    private lateinit var sqlHelper: SqlHelper
+    lateinit var sqlHelper: SqlHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // CREAR EL OPENHELPER
-        sqlHelper = SqlHelper(this)
-        val db = sqlHelper.writableDatabase
+        // Obtén la instancia compartida de SqlHelper
+        sqlHelper = SqlHelper.getInstance(this)
 
         // Configura la ActionBar
         val toolbar: Toolbar = findViewById(R.id.toolbar)
@@ -98,4 +97,5 @@ class MainActivity : AppCompatActivity() {
         Log.d("MainActivity", "Navigate Up Result: $navigateUpResult")
         return navigateUpResult
     }
+
 }
