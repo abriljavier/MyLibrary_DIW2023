@@ -82,14 +82,5 @@ class DeleteFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        // Cierra la base de datos solo si está abierta
-        sqlHelper.db?.let {
-            if (it.isOpen) {
-                it.close()
-            }
-        }
-    }
 }
 

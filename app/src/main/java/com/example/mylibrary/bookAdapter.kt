@@ -25,7 +25,9 @@ class BookAdapter(private val books: List<Book>) :
         val book = books[position]
         holder.titleTextView.text = book.title
         holder.authorTextView.text = book.author
-        holder.dateTextView.text = book.dateRead.toString() // Puedes formatear la fecha según tus necesidades
+        // Usar la función getFormattedDate() para obtener la fecha formateada
+        val formattedDate = book.getFormattedDate()
+        holder.dateTextView.text = formattedDate
     }
 
     override fun getItemCount(): Int {
