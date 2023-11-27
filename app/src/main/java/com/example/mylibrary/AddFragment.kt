@@ -11,16 +11,20 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     private var selectedDate: Calendar? = null
     lateinit var sqlHelper: SqlHelper
     lateinit var db: SQLiteDatabase
+    private lateinit var dateOutput: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,6 +63,12 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         selectedDate?.set(Calendar.YEAR, year)
         selectedDate?.set(Calendar.MONTH, month)
         selectedDate?.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+        // Formatear la fecha y mostrarla en el TextView
+        val dateFormat = SimpleDateFormat("dd-MM-yy", Locale.getDefault())
+        val formattedDate = dateFormat.format(selectedDate?.time)
+
+        dateOutput.text = "Date selected : ${formattedDate}"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,6 +77,7 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         val button = view.findViewById<Button>(R.id.sendRowButton)
         val titleEdit = view.findViewById<EditText>(R.id.editTitle)
         val authorEdit = view.findViewById<EditText>(R.id.editAuthor)
+        dateOutput = view.findViewById(R.id.outputDate)
 
         // Lógica para insertar datos en la base de datos cuando se presiona el botón
         button.setOnClickListener {
@@ -76,6 +87,10 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             if (title.isNotEmpty() && author.isNotEmpty()) {
                 val dateInMillis = selectedDate?.timeInMillis
                 if (dateInMillis !=null) {
+
+                    val dateOutput = view.findViewById<TextView>(R.id.outputDate)
+                    dateOutput.text = dateOutput.toString()
+
                     val pairOfValues = ContentValues().apply {
                         put("title", title)
                         put("author", author)
@@ -107,6 +122,8 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             }
         }
     }
+
+
 
 }
 

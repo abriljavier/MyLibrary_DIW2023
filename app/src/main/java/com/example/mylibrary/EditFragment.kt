@@ -10,10 +10,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 class EditFragment : Fragment() {
 
@@ -23,6 +26,7 @@ class EditFragment : Fragment() {
     private var idToEdit = 0
     lateinit var editTitle: EditText
     lateinit var editAuthor: EditText
+    private lateinit var dateOutput: TextView
     private var selectedDate: Long = 0
 
     override fun onCreateView(
@@ -34,6 +38,7 @@ class EditFragment : Fragment() {
 
         editTitle = view.findViewById(R.id.editTitle)
         editAuthor = view.findViewById(R.id.editAuthor)
+        dateOutput = view.findViewById(R.id.outputDate)
 
         // Inicializar sqlHelper después de inflar el diseño
         sqlHelper = SqlHelper.getInstance(requireActivity().applicationContext)
@@ -79,6 +84,10 @@ class EditFragment : Fragment() {
                         idToEdit = book.id!!
                         view.findViewById<EditText>(R.id.editTitle)?.setText(book.title)
                         view.findViewById<EditText>(R.id.editAuthor)?.setText(book.author)
+                        // Formatear y mostrar la fecha en el TextView
+                        val dateFormat = SimpleDateFormat("dd-MM-yy", Locale.getDefault())
+                        view.findViewById<TextView>(R.id.outputDate)?.text = "Date selected: ${dateFormat.format(book.dateRead)}"
+
                         selectedDate = book.dateRead!! // Guardar la fecha actual
                         // Mostrar la fecha en un TextView o hacer lo que necesites
                     } else {
@@ -114,7 +123,11 @@ class EditFragment : Fragment() {
                 // Actualizar la fecha seleccionada
                 calendar.set(year, monthOfYear, dayOfMonth)
                 selectedDate = calendar.timeInMillis
-                // Puedes mostrar la nueva fecha en un TextView si lo deseas
+
+                // Formatear y mostrar la fecha en el TextView
+                val dateFormat = SimpleDateFormat("dd-MM-yy", Locale.getDefault())
+
+                view?.findViewById<TextView>(R.id.outputDate)?.text = "Date selected: ${dateFormat.format(calendar.time)}"
             },
             currentYear,
             currentMonth,
