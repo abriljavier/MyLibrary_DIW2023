@@ -25,37 +25,26 @@ class ShowFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.see_layout, container, false)
+        val view = inflater.inflate(R.layout.show_layout, container, false)
 
-        // Obtén la instancia del SqlHelper
+        //SE OBTIENE LA INSTANCIA DE LA BBDD
         sqlHelper = SqlHelper.getInstance(requireActivity().applicationContext)
         Log.d("SqlHelperInstance", "SqlHelper instance: $sqlHelper")
+        sqlHelper.db = sqlHelper.db ?: sqlHelper.writableDatabase
 
-        if (sqlHelper.db == null) {
-            println("la base de datos no es nula")
-            sqlHelper.db = sqlHelper.writableDatabase
-        } else {
-            println("La base de datos es nula")
-        }
-
-        // Obtén la lista de libros desde la base de datos
+        //SE TRAEN TODOS LOS LIBROS DE LA BBDD
         val books = sqlHelper.getAllBooks()
 
+        //SI LA BASE DE DATOS TIENE ROWS MUESTRALAS, SI NO, MUESTRA UN TEXTO DE AYUDA
         if (books.isNotEmpty()){
-            // Configura el RecyclerView y asigna el adaptador
+            //CONFIGURA EL RECYCLEVIEW Y LE ASIGNA LOS DATOS
             val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
             recyclerView.layoutManager = LinearLayoutManager(context)
             recyclerView.adapter = BookAdapter(books)
+            view.findViewById<TextView>(R.id.infoTextView).visibility = View.GONE
         } else {
-            val infoTextView = TextView(view.context)
-            infoTextView.text = "Please start by introducing an element in the bbdd"
-            infoTextView.textSize =20F
-            val father = view.findViewById<LinearLayout>(R.id.seeLayout)
-            father.addView(infoTextView)
+            view.findViewById<TextView>(R.id.infoTextView).visibility = View.VISIBLE
         }
-
-
-
         return view
     }
 }

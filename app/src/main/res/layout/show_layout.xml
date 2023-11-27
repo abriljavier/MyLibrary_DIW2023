@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="75dp">
+    android:layout_marginTop="55dp">
 
     <LinearLayout
         android:id="@+id/seeLayout"
-        android:layout_width="408dp"
-        android:layout_height="85dp"
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
         android:layout_marginBottom="2dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/recyclerView"
@@ -17,7 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- TextView para "Title" -->
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -34,7 +33,6 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <!-- TextView para "Author" -->
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -51,7 +49,6 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <!-- TextView para "Date" -->
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -69,6 +66,20 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/infoTextView"
+        android:layout_width="412dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="1dp"
+        android:gravity="center"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="Please start by introducing an element in the bbdd"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seeLayout" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

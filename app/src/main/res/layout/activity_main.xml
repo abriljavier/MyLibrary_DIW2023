@@ -21,8 +21,6 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/toolbarColor" />
 
-        <!-- Aquí podrías tener otros elementos de tu actividad -->
-
         <!-- Contenedor de fragmento de navegación (NavHostFragment) -->
         <fragment
             android:id="@+id/nav_host_fragment"

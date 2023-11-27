@@ -25,19 +25,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Obtén la instancia compartida de SqlHelper
+        //SE OBTIENE LA INSTANCIA DE LA BBDD
         sqlHelper = SqlHelper.getInstance(this)
 
-        // Configura la ActionBar
+        //CONFIGURO LA TOOLBAR DEL MAIN
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
+        //RECOJO LOS ELEMENTOS QUE ACOMPAÑAN AL NAV DRAWER
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
-
         val navController = findNavController(R.id.nav_host_fragment)
 
-        // Configura la barra de herramientas con el botón de hamburguesa
+        //QUE ELEMENTOS DEL NAV_GRAPH VAN EN EL NAVIGATION
         val appBarConfiguration = AppBarConfiguration(setOf(
             R.id.firstFragment, R.id.secondFragment,
             R.id.thirdFragment, R.id.fourthFragment,
@@ -45,10 +45,10 @@ class MainActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        // Configura la navegación del NavigationView
+        //CONFIGURO LA NAVEGACIÓN
         navView.setupWithNavController(navController)
 
-        // Añade el código de ActionBarDrawerToggle
+        //CÓDIGO PARA CUANDO SE PULSA EL BOTÓN DE HAMBUGUESA
         val toggle = ActionBarDrawerToggle(
             this, drawerLayout, toolbar,
             R.string.navigation_drawer_open,
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        // Maneja los clics en los elementos del NavigationView
+        //MANEJAR LOS ENLACES EN EL NAV DRAWER
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.firstFragmentNav -> {
@@ -84,13 +84,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-    override fun onSupportNavigateUp(): Boolean {
-        Log.d("MainActivity", "onSupportNavigateUp called")
-        val navController = findNavController(R.id.nav_host_fragment)
-        val navigateUpResult = navController.navigateUp() || super.onSupportNavigateUp()
-        Log.d("MainActivity", "Navigate Up Result: $navigateUpResult")
-        return navigateUpResult
-    }
-
 }

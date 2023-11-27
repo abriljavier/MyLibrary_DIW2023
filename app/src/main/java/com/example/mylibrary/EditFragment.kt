@@ -24,8 +24,8 @@ class EditFragment : Fragment() {
     private lateinit var sqlHelper: SqlHelper
     private lateinit var db: SQLiteDatabase
     private var idToEdit = 0
-    lateinit var editTitle: EditText
-    lateinit var editAuthor: EditText
+    private lateinit var editTitle: EditText
+    private lateinit var editAuthor: EditText
     private lateinit var dateOutput: TextView
     private var selectedDate: Long = 0
 
@@ -33,17 +33,18 @@ class EditFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflar el diseño para este fragmento (se hará después de obtener el título)
         val view = inflater.inflate(R.layout.edit_row_layout, container, false)
 
+        //DECLARACIÓN DE LAS VISTAS DEL LAYOUT
         editTitle = view.findViewById(R.id.editTitle)
         editAuthor = view.findViewById(R.id.editAuthor)
         dateOutput = view.findViewById(R.id.outputDate)
 
-        // Inicializar sqlHelper después de inflar el diseño
+        //RECOGE LA BASE DE DATOS DEL CRUD
         sqlHelper = SqlHelper.getInstance(requireActivity().applicationContext)
         db = sqlHelper.writableDatabase
 
+        //MUESTRA EL DIALOGO PARA INTRODUCIR EL NOMBRE A EDITAR
         showInputDialog(view)
 
         //BOTÓN PARA AGREGAR UNA NUEVA FECHA
@@ -56,7 +57,7 @@ class EditFragment : Fragment() {
         val modifyButton = view.findViewById<Button>(R.id.sendRowButton)
         modifyButton.setOnClickListener {
             //NO DEJA MANDAR UNA ROW VACIA
-            if (editTitle.text!=null && editAuthor!=null){
+            if (editTitle.text!=null && editAuthor.text!=null){
                 editRow()
             }else {
                 Toast.makeText(context, "Please do not leave empty fields", Toast.LENGTH_SHORT).show()
@@ -66,60 +67,63 @@ class EditFragment : Fragment() {
         return view
     }
 
+    //EL DIALOGO PARA INTRODUCIR EL NOMBRE
     private fun showInputDialog(view: View) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
         val input = EditText(requireContext())
+
+        //CREA EL DIALOGO Y LE ASIGNA EL TITULO, QUE NO SEA CANCELABLE Y LOS BOTONES
         builder.setTitle("Enter Book Title")
             .setView(input)
+            .setCancelable(false)
             .setPositiveButton("OK") { _, _ ->
                 val title = input.text.toString()
+
+                //EL USUARIO INTRODUCE UN TÍTULO EN EL DIALOG Y SI NO ESTÁ VACIO
                 if (title.isNotEmpty()) {
                     selectedTitle = title
-                    // Llamamos a getOneBookByTitle cuando tenemos el título
-                    val book = getOneBookByTitle(selectedTitle)
-                    // Ahora puedes hacer lo que quieras con el objeto book, por ejemplo, mostrarlo en la UI
+
+                    //SE TRAE EL BOOK DE LA BASE DE DATOS CON UN MÉTODO DEL CRUD
+                    val book = sqlHelper.getOneBookByTitle(selectedTitle!!)
+
+                    //SI EL BOOK EXISTE
                     if (book != null) {
-                        // Hacer algo con el libro
-                        // Por ejemplo, mostrarlo en los campos de edición
+
+                        //SETEAS EL ID, EL TITULO Y EL AUTOR
                         idToEdit = book.id!!
                         view.findViewById<EditText>(R.id.editTitle)?.setText(book.title)
                         view.findViewById<EditText>(R.id.editAuthor)?.setText(book.author)
-                        // Formatear y mostrar la fecha en el TextView
+
+                        //SETEAS TAMBIÉN LA FECHA EN EL TEXTVIEW DE FECHA FORMATEADA
                         val dateFormat = SimpleDateFormat("dd-MM-yy", Locale.getDefault())
                         view.findViewById<TextView>(R.id.outputDate)?.text = "Date selected: ${dateFormat.format(book.dateRead)}"
 
-                        selectedDate = book.dateRead!! // Guardar la fecha actual
-                        // Mostrar la fecha en un TextView o hacer lo que necesites
+                        //DE MOMENTO SETEO LA FECHA A LA MISMA QUE VIENE DE LA BBDD
+                        selectedDate = book.dateRead!!
+
                     } else {
-                        // Manejar el caso en que no se encuentra el libro
-                        // Puedes mostrar un mensaje, etc.
+                        //SI EL LIBRO NO EXISTE ES QUE NO ESTÁ BIEN INTRODUCIDO EL TÍTULO
                         showInputDialog(view)
                         Toast.makeText(context, "There is no book with this title!", Toast.LENGTH_SHORT).show()
 
                     }
                 } else {
-                    // El título está vacío, manejar según tus necesidades
-                    // Puedes mostrar un mensaje, etc.
+                    //SI NO INTRODUCES TÍTULO DEBES VOLVER A ESTE DIALOG
                     showInputDialog(view)
                     Toast.makeText(context, "Please insert a title", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
+                //SI CANCELAS EL DIALOGO VUELVES AL FRAGMENT PRINCIPAL
                 dialog.cancel()
-                // Puedes cerrar el fragmento o manejar según tus necesidades
+
                 val navController = view?.let { Navigation.findNavController(it) }
-                // Navega a la acción que muestra todas las filas
                 navController?.navigate(R.id.action_showAllRows)
-                // La actualización fue exitosa
-                // Puedes mostrar un mensaje al usuario o realizar otras acciones
             }
             .show()
     }
 
-    private fun getOneBookByTitle(title: String?): Book? {
-        return title?.let { sqlHelper.getOneBookByTitle(it) }
-    }
-
+    //MOSTRAR EL DATEPICKER DE NUEVO CON LAS FUNCIONALIDADES DEL ADDFRAGMENT
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val currentDate = Calendar.getInstance()
@@ -130,13 +134,14 @@ class EditFragment : Fragment() {
         val datePickerDialog = DatePickerDialog(
             requireContext(),
             { _: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-                // Actualizar la fecha seleccionada
                 calendar.set(year, monthOfYear, dayOfMonth)
+
+                //SI EL USUARIO HA ABIERTO EL DATEPICKER ME SETEAS LA FECHA A LA NUEVA QUE COJA
+                //SI NO TE QUEDAS CON LA ANTIGUA
                 selectedDate = calendar.timeInMillis
 
-                // Formatear y mostrar la fecha en el TextView
+                //MOSTRAR LA NUEVA FECHA EN EL TEXTVIEW
                 val dateFormat = SimpleDateFormat("dd-MM-yy", Locale.getDefault())
-
                 view?.findViewById<TextView>(R.id.outputDate)?.text = "Date selected: ${dateFormat.format(calendar.time)}"
             },
             currentYear,
@@ -147,22 +152,29 @@ class EditFragment : Fragment() {
         datePickerDialog.show()
     }
 
+    // EL MÉTODO PARA EDITAR EL LIBRO
     private fun editRow() {
-        if (editTitle.text != null && editAuthor.text != null) {
-            // Utilizar selectedDate para la actualización de la fecha en tu base de datos
+        //SI EL TEXTO INTRODUCIDO NO ES VACIO
+        if (editTitle.text.toString() != "" && editAuthor.text.toString() != "") {
+
+            //HACES LA QUERY CON EL MÉTODO DE LA BBDD
             val result = sqlHelper.updateRowById(idToEdit, editTitle.text.toString(), editAuthor.text.toString(), selectedDate)
+
+            //SI HA IDO BIEN, TOAST Y PARA EL SHOWFRAGMENT
             if (result > 0) {
+
                 Toast.makeText(context, "The row has been modified!", Toast.LENGTH_SHORT).show()
+
                 val navController = view?.let { Navigation.findNavController(it) }
-                // Navega a la acción que muestra todas las filas
                 navController?.navigate(R.id.action_showAllRows)
-                // La actualización fue exitosa
-                // Puedes mostrar un mensaje al usuario o realizar otras acciones
+
             } else {
+                //HA HABIDO UN PROBLEMA CON LA QUERY
                 Toast.makeText(context, "This row cannot be modified!", Toast.LENGTH_SHORT).show()
-                // La actualización no tuvo éxito
-                // Puedes mostrar un mensaje de error o realizar otras acciones
             }
+        } else{
+            //HAY ALGUN CAMPO VACÍO
+            Toast.makeText(context, "Remember to fill all fields", Toast.LENGTH_SHORT).show()
         }
     }
 }

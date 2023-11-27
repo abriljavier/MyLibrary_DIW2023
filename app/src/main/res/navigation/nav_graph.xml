@@ -9,7 +9,7 @@
         android:id="@+id/firstFragment"
         android:name="com.example.mylibrary.ShowFragment"
         android:label="My Books"
-        tools:layout="@layout/see_layout" />
+        tools:layout="@layout/show_layout" />
 
     <fragment
         android:id="@+id/secondFragment"

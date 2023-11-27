@@ -9,13 +9,4 @@ class Book(id:Int?, title:String, author:String, dateRead: Long) {
     val title: String = title
     val author: String = author
     val dateRead: Long = dateRead
-
-    fun getFormattedDate(): String? {
-        return dateRead?.let {
-            val calendar = Calendar.getInstance()
-            calendar.timeInMillis = it
-            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            return dateFormat.format(calendar.time)
-        }
-    }
 }

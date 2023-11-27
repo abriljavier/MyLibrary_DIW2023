@@ -5,6 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class BookAdapter(private val books: List<Book>) :
     RecyclerView.Adapter<BookAdapter.ViewHolder>() {
@@ -25,8 +28,12 @@ class BookAdapter(private val books: List<Book>) :
         val book = books[position]
         holder.titleTextView.text = book.title
         holder.authorTextView.text = book.author
-        // Usar la función getFormattedDate() para obtener la fecha formateada
-        val formattedDate = book.getFormattedDate()
+
+        //CUANDO SE MUESRTA LA FECHA SE FORMATEA A dd/MM/yyyy
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = book.dateRead
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val formattedDate = dateFormat.format(calendar.time)
         holder.dateTextView.text = formattedDate
     }
 

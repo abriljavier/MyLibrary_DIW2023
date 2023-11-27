@@ -9,14 +9,17 @@ import android.util.Log
 class SqlHelper private constructor(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
-    var db: SQLiteDatabase? = null // Cambiado a Nullable
+    var db: SQLiteDatabase? = null
 
+    //CREAS UN CONJUNTO DE VARIABLES ESTÁTICAS Y LAS ASIGNAS A INSTANCE
     companion object {
         private const val DATABASE_NAME = "library.db"
         private const val DATABASE_VERSION = 1
 
         private var instance: SqlHelper? = null
 
+        //CUANDO UN FRAGMENT SOLICITE LA BASE DE DATOS SI NO EXISTE LA CREARÁ
+        // Y SI NO LE DEVUELVE LA BBDD QUE EXISTE
         @Synchronized
         fun getInstance(context: Context): SqlHelper {
             if (instance == null) {
@@ -27,9 +30,9 @@ class SqlHelper private constructor(context: Context) :
         }
     }
 
-    //CREAR LA BBDD AL INICIAR LA APP
+    //CREAR LA BBDD AL INICIAR LA APP Y LA ASIGNA A LA INSTANCIA GENERAL DE SQLITEDATABASE
     override fun onCreate(db: SQLiteDatabase) {
-        this.db = db // Agrega esta línea
+        this.db = db
         db.execSQL("CREATE TABLE library (id INTEGER PRIMARY KEY, title TEXT UNIQUE, author TEXT, date INTEGER)")
     }
 
@@ -80,8 +83,8 @@ class SqlHelper private constructor(context: Context) :
     //DEVOLVER UN LIBRO DE TIPO BOOK DADO UN TITULO
     fun getOneBookByTitle(title: String): Book? {
         var oneBook: Book? = null
-        this.db?.let { safeDb ->
-            val cursor = safeDb.query(
+        if (db != null) {
+            val cursor = db!!.query(
                 "library",
                 arrayOf("id", "title", "author", "date"),
                 "title = ?",
@@ -115,7 +118,6 @@ class SqlHelper private constructor(context: Context) :
         val whereClause = "id = ?"
         val whereArgs = arrayOf(id.toString())
 
-        // La función update retorna el número de filas afectadas
         return db?.update("library", values, whereClause, whereArgs) ?: 0
     }
 
