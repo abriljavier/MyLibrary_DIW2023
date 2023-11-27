@@ -6,8 +6,77 @@
     android:layout_height="match_parent"
     android:layout_marginTop="75dp">
 
+    <LinearLayout
+        android:id="@+id/seeLayout"
+        android:layout_width="408dp"
+        android:layout_height="85dp"
+        android:layout_marginBottom="2dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- TextView para "Title" -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#DDDDDD"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:text="Title"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- TextView para "Author" -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#DDDDDD"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:text="Author"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- TextView para "Date" -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#DDDDDD"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:text="Date"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="413dp"
+        android:layout_height="642dp"
+        android:layout_marginTop="88dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

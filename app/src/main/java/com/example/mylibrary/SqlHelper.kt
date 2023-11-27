@@ -29,7 +29,7 @@ class SqlHelper private constructor(context: Context) :
 
     override fun onCreate(db: SQLiteDatabase) {
         this.db = db // Agrega esta línea
-        db.execSQL("CREATE TABLE library (id INTEGER PRIMARY KEY, title TEXT, author TEXT, date INTEGER)")
+        db.execSQL("CREATE TABLE library (id INTEGER PRIMARY KEY, title TEXT UNIQUE, author TEXT, date INTEGER)")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, p1: Int, p2: Int) {

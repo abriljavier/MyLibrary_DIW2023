@@ -14,15 +14,11 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import androidx.navigation.Navigation.findNavController
 import java.util.Calendar
-
-lateinit var sqlHelper: SqlHelper
-lateinit var db: SQLiteDatabase
 
 class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
-    private var selectedDate: Calendar = Calendar.getInstance()
+    private var selectedDate: Calendar? = null
     lateinit var sqlHelper: SqlHelper
     lateinit var db: SQLiteDatabase
 
@@ -43,20 +39,26 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun showDatePicker() {
+        if (selectedDate == null) {
+            selectedDate = Calendar.getInstance()
+        }
+
+        val currentDate = Calendar.getInstance()
         val datePicker = DatePickerDialog(
             requireActivity(),
             this,
-            selectedDate.get(Calendar.YEAR),
-            selectedDate.get(Calendar.MONTH),
-            selectedDate.get(Calendar.DAY_OF_MONTH)
+            selectedDate!!.get(Calendar.YEAR),
+            selectedDate!!.get(Calendar.MONTH),
+            selectedDate!!.get(Calendar.DAY_OF_MONTH)
         )
+        datePicker.datePicker.maxDate = currentDate.timeInMillis
         datePicker.show()
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        selectedDate.set(Calendar.YEAR, year)
-        selectedDate.set(Calendar.MONTH, month)
-        selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        selectedDate?.set(Calendar.YEAR, year)
+        selectedDate?.set(Calendar.MONTH, month)
+        selectedDate?.set(Calendar.DAY_OF_MONTH, dayOfMonth)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,25 +74,33 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             val author = authorEdit.text.toString()
 
             if (title.isNotEmpty() && author.isNotEmpty()) {
-                val dateInMillis = selectedDate.timeInMillis
+                val dateInMillis = selectedDate?.timeInMillis
+                if (dateInMillis !=null) {
+                    val pairOfValues = ContentValues().apply {
+                        put("title", title)
+                        put("author", author)
+                        put("date", dateInMillis)
+                    }
 
-                val pairOfValues = ContentValues().apply {
-                    put("title", title)
-                    put("author", author)
-                    put("date", dateInMillis)
-                }
-
-                // Llamar a un método en DatabaseHelper para realizar la inserción
-                val newRow = db.insert("library", null, pairOfValues)
-                println("Books: ${sqlHelper.getAllBooks()}")
-                if (newRow != -1L) {
-                    Toast.makeText(context, "Row inserted successfully", Toast.LENGTH_SHORT).show()
-                    // Obtén el NavController usando la vista del fragmento
-                    val navController = view?.let { Navigation.findNavController(it) }
-                    // Navega a la acción que muestra todas las filas
-                    navController?.navigate(R.id.action_showAllRows)
+                    // Llamar a un método en DatabaseHelper para realizar la inserción
+                    val newRow = db.insert("library", null, pairOfValues)
+                    println("Books: ${sqlHelper.getAllBooks()}")
+                    if (newRow != -1L) {
+                        Toast.makeText(context, "Row inserted successfully", Toast.LENGTH_SHORT)
+                            .show()
+                        // Obtén el NavController usando la vista del fragmento
+                        val navController = view?.let { Navigation.findNavController(it) }
+                        // Navega a la acción que muestra todas las filas
+                        navController?.navigate(R.id.action_showAllRows)
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Error inserting row, please try again.Please check that you do not repeat the book or leave an empty field.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 } else {
-                    Toast.makeText(context, "Error inserting row, please try again", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Please select a valid date", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 Toast.makeText(context, "Please fill in all the fields", Toast.LENGTH_SHORT).show()

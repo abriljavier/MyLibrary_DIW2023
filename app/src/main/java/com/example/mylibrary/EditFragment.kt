@@ -23,7 +23,7 @@ class EditFragment : Fragment() {
     private var idToEdit = 0
     lateinit var editTitle: EditText
     lateinit var editAuthor: EditText
-    private var selectedDate: Long = 0 // Variable para almacenar la fecha seleccionada
+    private var selectedDate: Long = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,16 +41,21 @@ class EditFragment : Fragment() {
 
         showInputDialog(view)
 
-        // Configurar el botón para agregar una nueva fecha
+        //BOTÓN PARA AGREGAR UNA NUEVA FECHA
         val addDateButton = view.findViewById<Button>(R.id.addDateButton)
         addDateButton.setOnClickListener {
             showDatePickerDialog()
         }
 
-        // Configurar el botón para enviar la fila
+        //BOTÓN PARA MANDAR LA MODIFICACIÓN DE LA ROW
         val modifyButton = view.findViewById<Button>(R.id.sendRowButton)
         modifyButton.setOnClickListener {
-            editRow()
+            //NO DEJA MANDAR UNA ROW VACIA
+            if (editTitle.text!=null && editAuthor!=null){
+                editRow()
+            }else {
+                Toast.makeText(context, "Please do not leave empty fields", Toast.LENGTH_SHORT).show()
+            }
         }
 
         return view
@@ -98,13 +103,14 @@ class EditFragment : Fragment() {
 
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
+        val currentDate = Calendar.getInstance()
         val currentYear = calendar.get(Calendar.YEAR)
         val currentMonth = calendar.get(Calendar.MONTH)
         val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
 
         val datePickerDialog = DatePickerDialog(
             requireContext(),
-            DatePickerDialog.OnDateSetListener { _: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+            { _: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int ->
                 // Actualizar la fecha seleccionada
                 calendar.set(year, monthOfYear, dayOfMonth)
                 selectedDate = calendar.timeInMillis
@@ -114,7 +120,7 @@ class EditFragment : Fragment() {
             currentMonth,
             currentDay
         )
-
+        datePickerDialog.datePicker.maxDate = currentDate.timeInMillis
         datePickerDialog.show()
     }
 

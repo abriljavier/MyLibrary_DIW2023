@@ -1,10 +1,14 @@
 package com.example.mylibrary
 
 import android.os.Bundle
+import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,12 +40,21 @@ class ShowFragment : Fragment() {
 
         // Obtén la lista de libros desde la base de datos
         val books = sqlHelper.getAllBooks()
-        println(books)
 
-        // Configura el RecyclerView y asigna el adaptador
-        val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = BookAdapter(books)
+        if (books.isNotEmpty()){
+            // Configura el RecyclerView y asigna el adaptador
+            val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            recyclerView.adapter = BookAdapter(books)
+        } else {
+            val infoTextView = TextView(view.context)
+            infoTextView.text = "Please start by introducing an element in the bbdd"
+            infoTextView.textSize =20F
+            val father = view.findViewById<LinearLayout>(R.id.seeLayout)
+            father.addView(infoTextView)
+        }
+
+
 
         return view
     }
