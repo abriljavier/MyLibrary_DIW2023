@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         // Configura la barra de herramientas con el botón de hamburguesa
         val appBarConfiguration = AppBarConfiguration(setOf(
             R.id.firstFragment, R.id.secondFragment,
-            R.id.thirdFragment, R.id.fourthFragment, R.id.fifthFragment
+            R.id.thirdFragment, R.id.fourthFragment,
         ), drawerLayout)
 
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -77,11 +77,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.fourthFragmentNav -> {
                     navController.navigate(R.id.fourthFragment)
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    true
-                }
-                R.id.fifthFragmentNav -> {
-                    navController.navigate(R.id.fifthFragment)
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }

@@ -5,22 +5,23 @@
 
         <item
             android:id="@+id/firstFragmentNav"
+            android:icon="@drawable/show_icon"
             android:title="Show all the books!" />
 
         <item
             android:id="@+id/secondFragmentNav"
+            android:icon="@drawable/add_icon"
             android:title="Add a book to my list" />
 
         <item
+            android:icon="@drawable/edit_icon"
             android:id="@+id/thirdFragmentNav"
             android:title="Edit a book of my list" />
 
         <item
+            android:icon="@drawable/delete_icon"
             android:id="@+id/fourthFragmentNav"
             android:title="Delete a book" />
 
-        <item
-            android:id="@+id/fifthFragmentNav"
-            android:title="Search one book" />
     </group>
 </menu>

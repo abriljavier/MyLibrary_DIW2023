@@ -27,15 +27,29 @@ class SqlHelper private constructor(context: Context) :
         }
     }
 
+    //CREAR LA BBDD AL INICIAR LA APP
     override fun onCreate(db: SQLiteDatabase) {
         this.db = db // Agrega esta línea
         db.execSQL("CREATE TABLE library (id INTEGER PRIMARY KEY, title TEXT UNIQUE, author TEXT, date INTEGER)")
     }
 
+    //HACE FALTA IMPLEMENTAR PERO DE MOMENTO NO HACE NADA (NO HAY ACTUALIZACIÓN DE VERSIONES)
     override fun onUpgrade(db: SQLiteDatabase, p1: Int, p2: Int) {
         // No es necesario implementar esto por ahora
     }
 
+    //INSERTAR UNA ROW
+    fun addBook(title: String, author: String, date: Long): Long {
+        val values = ContentValues().apply {
+            put("title", title)
+            put("author", author)
+            put("date", date)
+        }
+
+        return db?.insert("library", null, values) ?: -1
+    }
+
+    //DEVOLVER TODOS LOS LIBROS COMO UNA COLECCIÓN
     fun getAllBooks(): List<Book> {
         val books = mutableListOf<Book>()
         this.db?.let { safeDb ->
@@ -63,6 +77,7 @@ class SqlHelper private constructor(context: Context) :
         return books
     }
 
+    //DEVOLVER UN LIBRO DE TIPO BOOK DADO UN TITULO
     fun getOneBookByTitle(title: String): Book? {
         var oneBook: Book? = null
         this.db?.let { safeDb ->
@@ -89,7 +104,7 @@ class SqlHelper private constructor(context: Context) :
         return oneBook
     }
 
-
+    //MODIFICAR UN LIBRO POR ID
     fun updateRowById(id: Int, title: String, author: String, date: Long): Int {
         val values = ContentValues().apply {
             put("title", title)
@@ -102,6 +117,14 @@ class SqlHelper private constructor(context: Context) :
 
         // La función update retorna el número de filas afectadas
         return db?.update("library", values, whereClause, whereArgs) ?: 0
+    }
+
+    //BORRAR UN LIBRO POR TÍTULO
+    fun deleteBookByTitle(title: String): Int {
+        val whereClause = "title = ?"
+        val whereArgs = arrayOf(title)
+
+        return db?.delete("library", whereClause, whereArgs) ?: 0
     }
 }
 

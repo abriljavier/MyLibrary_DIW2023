@@ -29,12 +29,6 @@
         android:label="Delete a book"
         tools:layout="@layout/delete_row_layout" />
 
-    <fragment
-        android:id="@+id/fifthFragment"
-        android:name="com.example.mylibrary.SearchFragment"
-        android:label="Find one book by title"
-        tools:layout="@layout/search_layout" />
-
     <action
         android:id="@+id/action_showAllRows"
         app:destination="@+id/firstFragment" />

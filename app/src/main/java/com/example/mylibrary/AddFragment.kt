@@ -86,23 +86,12 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
             if (title.isNotEmpty() && author.isNotEmpty()) {
                 val dateInMillis = selectedDate?.timeInMillis
-                if (dateInMillis !=null) {
-
-                    val dateOutput = view.findViewById<TextView>(R.id.outputDate)
-                    dateOutput.text = dateOutput.toString()
-
-                    val pairOfValues = ContentValues().apply {
-                        put("title", title)
-                        put("author", author)
-                        put("date", dateInMillis)
-                    }
-
-                    // Llamar a un método en DatabaseHelper para realizar la inserción
-                    val newRow = db.insert("library", null, pairOfValues)
+                if (dateInMillis != null) {
+                    // Llamar al nuevo método en SqlHelper para realizar la inserción
+                    val newRowId = sqlHelper.addBook(title, author, dateInMillis)
                     println("Books: ${sqlHelper.getAllBooks()}")
-                    if (newRow != -1L) {
-                        Toast.makeText(context, "Row inserted successfully", Toast.LENGTH_SHORT)
-                            .show()
+                    if (newRowId != -1L) {
+                        Toast.makeText(context, "Row inserted successfully", Toast.LENGTH_SHORT).show()
                         // Obtén el NavController usando la vista del fragmento
                         val navController = view?.let { Navigation.findNavController(it) }
                         // Navega a la acción que muestra todas las filas
@@ -110,7 +99,7 @@ class AddFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     } else {
                         Toast.makeText(
                             context,
-                            "Error inserting row, please try again.Please check that you do not repeat the book or leave an empty field.",
+                            "Error inserting row, please try again. Please check that you do not repeat the book or leave an empty field.",
                             Toast.LENGTH_SHORT
                         ).show()
                     }

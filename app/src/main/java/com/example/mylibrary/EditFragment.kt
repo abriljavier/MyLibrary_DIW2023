@@ -93,15 +93,25 @@ class EditFragment : Fragment() {
                     } else {
                         // Manejar el caso en que no se encuentra el libro
                         // Puedes mostrar un mensaje, etc.
+                        showInputDialog(view)
+                        Toast.makeText(context, "There is no book with this title!", Toast.LENGTH_SHORT).show()
+
                     }
                 } else {
                     // El título está vacío, manejar según tus necesidades
                     // Puedes mostrar un mensaje, etc.
+                    showInputDialog(view)
+                    Toast.makeText(context, "Please insert a title", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.cancel()
                 // Puedes cerrar el fragmento o manejar según tus necesidades
+                val navController = view?.let { Navigation.findNavController(it) }
+                // Navega a la acción que muestra todas las filas
+                navController?.navigate(R.id.action_showAllRows)
+                // La actualización fue exitosa
+                // Puedes mostrar un mensaje al usuario o realizar otras acciones
             }
             .show()
     }

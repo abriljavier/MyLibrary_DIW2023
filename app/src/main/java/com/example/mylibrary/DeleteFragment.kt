@@ -61,19 +61,12 @@ class DeleteFragment : Fragment() {
     }
 
     private fun deleteRow(title: String) {
-        // No necesitas crear una nueva instancia de SqlHelper y SQLiteDatabase aquí
-        // Ya tienes la instancia compartida desde el Singleton
-
-        // Aquí asumimos que tienes una columna "title" en tu base de datos
-        val whereClause = "title = ?"
-        val whereArgs = arrayOf(title)
-
-        // Llamar al método delete en SQLiteDatabase para borrar la fila
-        val deletedRows = db.delete("library", whereClause, whereArgs)
+        // Llamar al nuevo método en SqlHelper para realizar la eliminación
+        val deletedRows = sqlHelper.deleteBookByTitle(title)
 
         if (deletedRows > 0) {
             Toast.makeText(context, "Row deleted successfully", Toast.LENGTH_SHORT).show()
-            //NAVEGAR A LA VIEW PRINCIPAL
+            // Navegar a la vista principal
             val navController = view?.let { Navigation.findNavController(it) }
             // Navega a la acción que muestra todas las filas
             navController?.navigate(R.id.action_showAllRows)
